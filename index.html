@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Instalación ESP32/ESP8266</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+    --primary-color: #2196F3;
+    --secondary-color: #1976D2;
+    --surface-color: #FFFFFF;
+    --background-color: #F5F5F5;
+    --text-primary: rgba(0, 0, 0, 0.87);
+    --text-secondary: rgba(0, 0, 0, 0.6);
+    --elevation-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    --elevation-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+/* Flutter Scaffold simulation */
+body {
+    background-color: var(--background-color);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Flutter AppBar simulation */
+.app-bar {
+    background: var(--primary-color);
+    color: white;
+    padding: 16px;
+    box-shadow: var(--elevation-1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+}
+
+.app-bar h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+main {
+    flex: 1;
+    padding: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.data-item {
+    background: var(--surface-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: var(--elevation-1);
+    transition: box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.data-item:active {
+    box-shadow: var(--elevation-2);
+}
+
+.data-item h2 {
+    font-size: 18px;  /* Cambiado de 14px a 18px */
+    font-weight: 500;
+    color: var(--text-primary);  /* Cambiado a color primario */
+    margin: 0 0 12px 0;
+    letter-spacing: 0.1px;
+}
+
+.value {
+    font-size: 16px;  /* Cambiado de 34px a 16px */
+    color: var(--text-primary);
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.5;  /* Mejorado para lectura */
+}
+
+.data-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.data-item:active::before {
+    opacity: 0.1;
+}
+
+footer {
+    background: var(--surface-color);
+    color: var(--text-secondary);
+    padding: 16px;
+    text-align: center;
+    box-shadow: var(--elevation-1);
+    font-size: 12px;
+}
+
+/* Flutter Dialog styles */
+.flutter-dialog-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.32);
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.flutter-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--surface-color);
+    border-radius: 28px;
+    padding: 24px;
+    min-width: 280px;
+    max-width: 90%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    animation: slideUp 0.3s ease-out;
+}
+
+.flutter-dialog-title {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0 0 16px 0;
+}
+
+.flutter-dialog-content {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.flutter-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.flutter-button {
+    border: none;
+    background: transparent;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s;
+    position: relative;
+    z-index: 2;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.flutter-button:hover {
+    background-color: rgba(33, 150, 243, 0.1);
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.flutter-button:active {
+    background: rgba(33, 150, 243, 0.2);
+    text-decoration: none;
+}
+
+.copy-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .code-container {
+            position: relative;
+        }
+
+        .code-container:hover .copy-button {
+            opacity: 1;
+        }
+
+        code {
+            display: block;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 14px;
+            word-break: break-all;
+            white-space: pre-wrap;
+            padding-right: 60px; /* Espacio para el botón */
+        }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+    to { 
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@media (max-width: 600px) {
+    .app-bar h1 {
+        font-size: 18px;
+    }
+
+    main {
+        padding: 12px;
+    }
+
+    .data-item {
+        padding: 16px;
+        margin-bottom: 12px;
+    }
+
+    .value {
+        font-size: 15px;
+    }
+
+    .flutter-button {
+        width: 100%;
+        margin: 8px 0;
+        text-align: center;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="app-bar">
+        <h1>Guía de Programación ESP32/ESP8266</h1>
+    </div>
+
+    <main>
+        <div class="data-item">
+            <h2>Paso 1: Descargar Arduino IDE</h2>
+            <div class="value">
+                <p>Descarga la última versión de Arduino IDE desde el sitio oficial.</p>
+                <a href="https://www.arduino.cc/en/software" class="flutter-button" target="_blank" rel="noopener">Descargar Arduino IDE</a>
+            </div>
+        </div>
+
+        <div class="data-item">
+            <h2>Paso 2: Instalar Drivers CH340</h2>
+            <div class="value">
+                <p>Descarga e instala los drivers CH340 para tu sistema operativo.</p>
+                <a href="https://sparks.gogo.co.nz/ch340.html" class="flutter-button" target="_blank" rel="noopener">Descargar Drivers CH340</a>
+            </div>
+        </div>
+
+        <div class="data-item">
+            <h2>Paso 3: Configurar Arduino IDE para ESP32</h2>
+            <div class="value">
+                <ol>
+                    <li>Abre Arduino IDE</li>
+                    <li>Ve a Archivo -> Preferencias</li>
+                    <li>En "Gestor de URLs Adicionales de Tarjetas" agrega:</li>
+                    <code>https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json</code>
+                </ol>
+            </div>
+        </div>
+
+        <div class="data-item">
+            <h2>Paso 4: Configurar Arduino IDE para ESP8266</h2>
+            <div class="value">
+                <ol>
+                    <li>En el mismo campo de preferencias, agrega (separado por coma):</li>
+                    <code>http://arduino.esp8266.com/stable/package_esp8266com_index.json</code>
+                </ol>
+            </div>
+        </div>
+
+        <div class="data-item">
+            <h2>Paso 5: Código para ESP8266 Wemos D1 R2</h2>
+            <div class="value">
+                <p>Copia y pega el siguiente código completo en tu Arduino IDE:</p>
+                <div class="code-container">
+                <code>
+#include >Arduino.h<
+#include >ESP8266WiFi.h<           // Para ESP8266
+#include >Firebase_ESP_Client.h<
+#include >DHT.h<                  // Adafruit DHT 1.3.8
+
+DHT dht_sensor(D4, DHT11);
+
+// Credenciales Wi‑Fi
+#define WIFI_SSID      "VIVOBOOK-DAN"
+#define WIFI_PASSWORD  "dany1234"
+
+// Claves y URL de Firebase Realtime Database
+#define API_KEY       "AIzaSyC4Gi2Q2rm0TRAhUZFKWZAnH5HPM1yF4kk"
+#define DATABASE_URL  "https://esp8266dht11-database-default-rtdb.firebaseio.com/"
+
+#include "addons/TokenHelper.h"       // Para gestión de tokens
+#include "addons/RTDBHelper.h"        // Para helper de RTDB
+
+FirebaseData   fbdo;
+FirebaseAuth   auth;
+FirebaseConfig config;
+
+unsigned long lastMillis = 0;
+bool signupOK = false;
+
+void setup() {
+    dht_sensor.begin();
+    Serial.begin(115200);
+    
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    Serial.print("Conectando WiFi");
+    while (WiFi.status() != WL_CONNECTED) {
+        Serial.print('.');
+        delay(300);
+    }
+    Serial.println();
+    Serial.print("Conectado, IP: ");
+    Serial.println(WiFi.localIP());
+
+    config.api_key = API_KEY;
+    config.database_url = DATABASE_URL;
+    config.token_status_callback = tokenStatusCallback;
+
+    if (Firebase.signUp(&config, &auth, "", "")) {
+        Serial.println("Firebase signup OK");
+        signupOK = true;
+    } else {
+        Serial.print("Signup failed: ");
+        Serial.println(config.signer.signupError.message.c_str());
+    }
+
+    Firebase.begin(&config, &auth);
+    Firebase.reconnectWiFi(true);
+}
+
+void loop() {
+    if (!signupOK || !Firebase.ready()) return;
+
+    unsigned long now = millis();
+    if (now - lastMillis < 1000) return;
+    lastMillis = now;
+
+    float temperature = dht_sensor.readTemperature();
+    float humidity = dht_sensor.readHumidity();
+
+    if (isnan(temperature) || isnan(humidity)) {
+        Serial.println("Error leyendo DHT11");
+        return;
+    }
+
+    if (Firebase.RTDB.setFloat(&fbdo, "DHT_11/Temperature", temperature)) {
+        Serial.print("Temp: ");
+        Serial.println(temperature);
+    } else {
+        Serial.print("Error al subir Temp: ");
+        Serial.println(fbdo.errorReason().c_str());
+    }
+
+    if (Firebase.RTDB.setFloat(&fbdo, "DHT_11/Humidity", humidity)) {
+        Serial.print("Hum: ");
+        Serial.println(humidity);
+    } else {
+        Serial.print("Error al subir Hum: ");
+        Serial.println(fbdo.errorReason().c_str());
+    }
+}</code>
+                <button class="copy-button">Copiar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-item">
+            <h2>Paso 6: Código para ESP32</h2>
+            <div class="value">
+                <p>Copia y pega el siguiente código completo en tu Arduino IDE:</p>
+                <div class="code-container">
+                <code>
+#include >Arduino.h<
+#include >WiFi.h<
+#include >Firebase_ESP_Client.h<
+#include >DHT.h<
+
+#define DHT_SENSOR_PIN 4
+#define DHT_SENSOR_TYPE DHT11
+
+DHT dht_sensor(DHT_SENSOR_PIN, DHT_SENSOR_TYPE);
+
+#include "addons/TokenHelper.h"
+#include "addons/RTDBHelper.h"
+
+#define WIFI_SSID "VIVOBOOK-DAN"
+#define WIFI_PASSWORD "dany1234"
+#define API_KEY "AIzaSyDSuCyHJIFXdCz3z7vfBzcgVEuAj1U02WA"
+#define DATABASE_URL "https://esp32dht-database-97559-default-rtdb.firebaseio.com/"
+
+FirebaseData fbdo;
+FirebaseAuth auth;
+FirebaseConfig config;
+
+unsigned long sendDataPrevMillis = 0;
+int count = 0;
+bool signupOK = false;
+
+int pinLED = 2;
+
+void setup() {
+    pinMode(pinLED, OUTPUT);
+    dht_sensor.begin();
+    Serial.begin(115200);
+    
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    Serial.print("Connecting to Wi-Fi");
+    while (WiFi.status() != WL_CONNECTED) {
+        Serial.print(".");
+        delay(300);
+    }
+    Serial.println();
+    Serial.print("Connected with IP: ");
+    Serial.println(WiFi.localIP());
+    Serial.println();
+
+    config.api_key = API_KEY;
+    config.database_url = DATABASE_URL;
+
+    if (Firebase.signUp(&config, &auth, "", "")) {
+        Serial.println("ok");
+        signupOK = true;
+    } else {
+        Serial.printf("%s\n", config.signer.signupError.message.c_str());
+    }
+
+    config.token_status_callback = tokenStatusCallback;
+    
+    Firebase.begin(&config, &auth);
+    Firebase.reconnectWiFi(true);
+}
+
+void loop() {
+    float temperature = dht_sensor.readTemperature();
+    float humidity = dht_sensor.readHumidity();
+    
+    if (Firebase.ready() && signupOK && (millis() - sendDataPrevMillis > 1000 || sendDataPrevMillis == 0)) {
+        sendDataPrevMillis = millis();
+        
+        if (Firebase.RTDB.setInt(&fbdo, "DHT_11/Temperature", temperature)) {
+            Serial.print("Temperature : ");
+            digitalWrite(pinLED, HIGH);
+            delay(500);
+            digitalWrite(pinLED, LOW);
+            delay(500);
+            Serial.println(temperature);
+        } else {
+            Serial.println("Failed to Read from the Sensor");
+            Serial.println("REASON: " + fbdo.errorReason());
+        }
+        
+        if (Firebase.RTDB.setFloat(&fbdo, "DHT_11/Humidity", humidity)) {
+            Serial.print("Humidity : ");
+            Serial.println(humidity);
+        } else {
+            Serial.println("Failed to Read from the Sensor");
+            Serial.println("REASON: " + fbdo.errorReason());
+        }
+    }
+}</code>
+                <button class="copy-button">Copiar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-item">
+            <h2>Paso 7: Librerías necesarias</h2>
+            <div class="value">
+                <p>Instala las siguientes librerías desde el Gestor de Librerías de Arduino IDE:</p>
+                <ul>
+                    <li>Firebase ESP Client (by Mobizt)</li>
+                    <li>DHT sensor library (by Adafruit)</li>
+                    <li>Adafruit Unified Sensor (dependencia de DHT)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="data-item">
+            <h2>Paso 8: Conexión de sensores adicionales</h2>
+            <div class="value">
+                <p>Para configurar sensores adicionales o recibir soporte técnico:</p>
+                <ul>
+                    <li>Contacta al desarrollador: Daniel Debersa</li>
+                    <li>Correo: <a href="mailto:developerdaniel@e-dino.mx" class="flutter-button">developerdaniel@e-dino.mx</a></li>
+                    <li>WhatsApp: <a href="https://wa.me/+522721648720" target="_blank" rel="noopener" class="flutter-button">+52 272 164 8720</a></li>
+                </ul>
+                <p>Servicios disponibles:</p>
+                <ul>
+                    <li>Configuración de sensores adicionales</li>
+                    <li>Integración con otros sistemas</li>
+                    <li>Soporte técnico personalizado</li>
+                    <li>Desarrollo de soluciones a medida</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Guía de programación ESP32/ESP8266 - 2025</p>
+    </footer>
+
+    <script>
+        function createCopyButton(container) {
+            const button = document.createElement('button');
+            button.className = 'copy-button';
+            button.textContent = 'Copiar';
+            
+            button.addEventListener('click', async () => {
+                const text = container.querySelector('code').innerText;
+                await navigator.clipboard.writeText(text);
+                button.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    button.textContent = 'Copiar';
+                }, 2000);
+            });
+            
+            return button;
+        }
+
+        // Envolver todos los elementos code en un contenedor y agregar botón de copiado
+        document.querySelectorAll('code').forEach(code => {
+            const container = document.createElement('div');
+            container.className = 'code-container';
+            code.parentNode.insertBefore(container, code);
+            container.appendChild(code);
+            container.appendChild(createCopyButton(container));
+        });
+    </script>
+</body>
+</html>
